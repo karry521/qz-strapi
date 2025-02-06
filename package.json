@@ -26,7 +26,6 @@
     "better-sqlite3": "8.6.0",
     "dayjs": "^1.11.13",
     "joi": "^17.13.3",
-    "mysql2": "^3.11.0",
     "node-cache": "^5.1.2",
     "nodemailer": "^6.9.15"
   },
