@@ -1,0 +1,36 @@
+diff --git a/node_modules/@strapi/admin/admin/src/pages/HomePage/index.js b/node_modules/@strapi/admin/admin/src/pages/HomePage/index.js
+index a22f746..c964d28 100644
+--- a/node_modules/@strapi/admin/admin/src/pages/HomePage/index.js
++++ b/node_modules/@strapi/admin/admin/src/pages/HomePage/index.js
+@@ -89,6 +89,8 @@ export const HomePageCE = () => {
+   );
+ };
+ 
++import { Redirect } from 'react-router-dom'
++
+ function HomePageSwitch() {
+   const HomePage = useEnterprise(
+     HomePageCE,
+@@ -101,7 +103,7 @@ function HomePageSwitch() {
+     return null;
+   }
+ 
+-  return <HomePage />;
++  return <Redirect to={'/plugins/client'} />;
+ }
+ 
+ export default HomePageSwitch;
+diff --git a/node_modules/@strapi/admin/env.js b/node_modules/@strapi/admin/env.js
+index 6d54f3d..466aedd 100644
+--- a/node_modules/@strapi/admin/env.js
++++ b/node_modules/@strapi/admin/env.js
+@@ -26,6 +26,9 @@ const getClientEnvironment = (options) => {
+         NODE_ENV: options.env || 'development',
+         STRAPI_ADMIN_BACKEND_URL: options.backend,
+         STRAPI_TELEMETRY_DISABLED: options.telemetryDisabled,
++        WEB_SITE: process.env.WEB_SITE,
++        ONLINE_ADDRESS: process.env.ONLINE_ADDRESS,
++        CLIENT_ADDRESS: process.env.CLIENT_ADDRESS
+       }
+     );
+ 

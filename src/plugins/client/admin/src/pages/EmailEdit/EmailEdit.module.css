@@ -1,0 +1,36 @@
+.ul {
+    width: 100%;
+    height: calc(var(--vh) * 100 - 120px);
+    color: #000000;
+    background-color: white;
+    box-shadow: 0px 0px 20px 0px #00000026;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+.ul li {
+    display: grid;
+    grid-template-columns: minmax(auto, 30%) minmax(auto, 30%) minmax(auto, 40%);
+    align-items: center;
+    border-bottom: 1px solid #DCDCDC;
+    padding: 16px 0px;
+    font-size: 14px;
+}
+
+.ul li:first-child {
+    background-color: #FAFAFA;
+    font-size: 16px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+.ul li:hover {
+    background-color: #FAFAFA;
+}
+
+li button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+}

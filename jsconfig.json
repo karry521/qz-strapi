@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "target": "ES2021",
+    "checkJs": true,
+    "allowJs": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "node/*": [
+        "./node_modules/*"
+      ]
+    }
+  }
+}

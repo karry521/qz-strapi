@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_logs",
+  "info": {
+    "singularName": "user-log",
+    "pluralName": "user-logs",
+    "displayName": "user-log",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email"
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    }
+  }
+}

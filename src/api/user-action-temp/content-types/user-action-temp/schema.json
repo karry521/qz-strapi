@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_action_temps",
+  "info": {
+    "singularName": "user-action-temp",
+    "pluralName": "user-action-temps",
+    "displayName": "user-action-temp",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "action": {
+      "type": "string",
+      "required": true
+    },
+    "token": {
+      "type": "text"
+    },
+    "useNum": {
+      "type": "integer",
+      "min": 0
+    },
+    "expire_date": {
+      "type": "datetime"
+    }
+  }
+}

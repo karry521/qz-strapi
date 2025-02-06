@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "app_versions",
+  "info": {
+    "singularName": "app-version",
+    "pluralName": "app-versions",
+    "displayName": "app-version",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "info": {
+      "type": "json",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    }
+  }
+}
