@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "postinstall": "patch-package",
     "develop": "strapi develop",
     "develop2": "strapi build && strapi develop",
     "start": "strapi start",
