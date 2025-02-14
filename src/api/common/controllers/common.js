@@ -263,6 +263,13 @@ module.exports = {
                 }
             })
 
+            // 获取最新的用户绑定情况
+            const info = await strapi.service('api::common.common').findUserBindInfo(email)
+
+            if (strapi.io) {
+                strapi.io.to(email + '-user-account').emit('user-subscribe-update', info)
+            }
+
             return { code: 200, msg: '删除绑定设备成功' }
         } catch (e) {
             return { code: 500, msg: e.mmessage }
