@@ -25,6 +25,8 @@ module.exports = {
             if (Number(type) === 0) { // 验证有效期
                 const verify = decodeJwtToken(token)
 
+                console.log("当前 JWT_SECRET:", process.env.JWT_SECRET)
+
                 return verify
             } else { // 不验证有效期
                 const verify = decode(token)
