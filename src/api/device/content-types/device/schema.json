@@ -15,7 +15,7 @@
     "account": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "password": {
       "type": "password",

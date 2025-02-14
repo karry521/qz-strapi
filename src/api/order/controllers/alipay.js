@@ -30,6 +30,11 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         }
       })
 
+      // 根据服务类型动态选择字段&获取初始or累加时间戳
+      const isAdvanced = queryProduct.advanced
+      const expireTimeKey = isAdvanced ? 'advanced_expire_time' : 'basic_expire_time'
+      const timestamp = user[expireTimeKey] ? dayjs(user[expireTimeKey]).valueOf() : dayjs().valueOf()
+
       // 创建订单
       let order = await strapi.db.query("api::order.order").create({
         data: {
@@ -40,8 +45,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           amount: queryProduct.price,
           payment_status: "-1",
           product_id: body.p_id,
-          expire_time:
-            new Date().getTime() + 1000 * 60 * 60 * 24 * queryProduct.valid_days,
+          expire_time: timestamp + 1000 * 60 * 60 * 24 * queryProduct.valid_days,
           user: {
             connect: { id: body.tokenId } // 关联用户信息
           }
@@ -147,6 +151,13 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             [expireTimeKey]: dayjs(queryOrder.expire_time).valueOf()
           }
         )
+
+        // 获取最新的用户绑定情况
+        const info = await strapi.service('api::common.common').findUserBindInfo(user.email)
+
+        if (strapi.io) {
+          strapi.io.to(user.email + '-user-account').emit('user-subscribe-update', info)
+        }
 
         console.log('newUser:::', newUser)
       }

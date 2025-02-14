@@ -1,13 +1,6 @@
 module.exports = ({ env }) => [
   'strapi::errors',
-  {
-    name: 'strapi::cors',
-    config: {
-      enabled: true,
-      origin: ['*'],  // 允许所有来源，或替换为具体的来源
-      headers: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning'], // 允许自定义请求头
-    },
-  },
+  'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',

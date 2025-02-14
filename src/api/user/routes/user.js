@@ -22,7 +22,7 @@ module.exports = {
         },
         {
             method: 'POST',
-            path: '/resetPassword',
+            path: '/reset-password',
             handler: 'user.resetPassword',
             config: {
                 auth: false,
@@ -32,12 +32,12 @@ module.exports = {
         },
         {
             method: 'GET',
-            path: '/findOneUser',
+            path: '/one-user',
             handler: 'user.findOneUser',
             config: {
                 auth: false,
                 policies: [],
-                middlewares: ["global::limitRequests"]
+                middlewares: ["global::user-auth", "global::limitRequests"]
             }
         }
     ]

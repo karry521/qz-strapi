@@ -1,7 +1,7 @@
 const axios = require('axios')
-const validateData = require('../../../utils/validateData')
+const dayjs = require('dayjs')
+
 const request = async (url, method, data) => {
-    console.log('url:::', process.env.BASE_ADDRESS + url)
     return await axios({
         url: process.env.BASE_ADDRESS + url,
         method,
@@ -10,46 +10,130 @@ const request = async (url, method, data) => {
 }
 
 module.exports = {
-    async findManyDevice(ctx) { // 获取单用户得所有设备信息
-        const { email } = ctx.query
-
-        const validate = validateData({ email }, {
-            email: ['string', 'require', 'email']
-        })
-
-        // 校验邮箱
-        if (validate.check) return validate
-
-        // 查询用户所有设备信息
-        const user = await strapi.service('api::user.user').findOne({
-            email
-        }, ['devices'])
-
-        console.log('devices:::', Array.from(user.devices).map(item => ({ account: item.account, password: item.password })))
-
-        return { code: 200, data: [] }
-    },
-    async icloudLogin(ctx) { // icloud账号登录
-
+    async icloudReset(ctx) { // icloud重置状态
         const { body } = ctx.request
 
-        // 校验参数
-        const validate = validateData(body, {
-            username: ['string', 'require'],
-            password: ['string', 'require']
+        // 网关转发
+        const result = await request('/v5/client/icloud/auth/reset', 'POST', {
+            mode: body.mode, // 1:基础模式  2:高级模式
+            username: body.username
         })
 
-        if (validate.check) return validate
+        ctx.body = result.data
+    },
+    async icloudLogin(ctx) { // icloud登录or发送短信验证码
+        const { body } = ctx.request
+
+        const dataJson = {
+            mode: body.mode, // 1:基础模式  2:高级模式
+            username: body.username,
+            password: body.password
+        }
+
+        // 短信验证码
+        if (body.verifyType === 'sms') {
+            dataJson.verifyType = body.verifyType
+            dataJson.deviceid = body.deviceid
+        }
 
         // 网关转发
-        const result = await request('/v5/client/icloud/auth/login', 'POST', {
-            mode: 1,
+        const result = await request('/v5/client/icloud/auth/login', 'POST', dataJson)
+
+        ctx.body = result.data
+    },
+    async icloudAuthInfo(ctx) { // 获取icloud的手机号列表
+        const { body } = ctx.request
+
+        // 网关转发
+        const result = await request('/v5/client/icloud/auth/authinfo', 'POST', {
+            mode: body.mode, // 1:基础模式  2:高级模式
             username: body.username,
             password: body.password
         })
 
-        console.log(result.config.url, result.status, result.data)
+        ctx.body = result.data
+    },
+    async icloudVerify(ctx) { // icloud双重验证
+        const { body } = ctx.request
 
-        return { code: 200, msg: '123' }
+        const dataJson = {
+            mode: body.mode, // 1:基础模式  2:高级模式
+            username: body.username,
+            password: body.password,
+            securityCode: body.securityCode // 验证码
+        }
+
+        // 短信验证码
+        if (body.verifyType === 'sms') {
+            dataJson.verifyType = body.verifyType
+            dataJson.deviceid = body.deviceid
+        }
+
+        // 网关转发
+        const result = await request('/v5/client/icloud/auth/verify', 'POST', dataJson)
+
+        ctx.body = result.data
+    },
+    async icloudCookie(ctx) { // icloud下载cookie
+        const { body } = ctx.request
+
+        // 网关转发
+        const result = await request('/v5/client/icloud/auth/cookie', 'POST', {
+            mode: body.mode, // 1:基础模式  2:高级模式
+            username: body.username
+        })
+
+        ctx.body = result.data
+    },
+    async HomeSummary(ctx) { // 获取dashboard页面统计图数据
+        try {
+
+            // 获取近三十天时间
+            const startOfDay = dayjs().subtract(30, 'days').format('YYYY-MM-DD')
+            const endOfDay = dayjs().endOf('days').format('YYYY-MM-DD')
+
+            // 创建knex实例
+            const knex = strapi.db.connection
+
+
+            // .select(knex.raw('DATE(created_at) as date, COUNT(*) as count'))
+            // .whereBetween('DATE(created_at)', [startOfDay, endOfDay])
+            // .groupBy('DATE(created_at)')
+            // .orderBy('DATE(created_at)', 'asc')
+
+            // 获取近一个月每天注册用户数量
+            const queryRegister = knex.raw(`
+                SELECT DATE(created_at) AS date, COUNT(*) AS count FROM up_users
+                WHERE DATE(created_at) BETWEEN ? AND ?
+                GROUP BY DATE(created_at)
+                ORDER BY DATE(created_at) ASC
+            `, [startOfDay, endOfDay])
+
+
+            // 获取近一个月每天的订单信息
+            const queryOrder = knex.raw(`
+                SELECT
+                    DATE(o.created_at) AS date,
+                    ROUND(SUM(o.amount) / 100, 2) AS totalAmount,
+                    ROUND(SUM(CASE WHEN p.renew = 'Y' THEN o.amount ELSE 0 END) / 100, 2) AS RenewAmount,
+                    ROUND(SUM(CASE WHEN p.renew = 'N' THEN o.amount ELSE 0 END) / 100, 2) AS NotRenewAmount,
+                    COUNT(CASE WHEN p.renew = 'Y' THEN 1 END) AS renewSum,
+                    COUNT(*) AS count
+                FROM orders as o
+                INNER JOIN products AS p on o.product_id = p.id
+                WHERE DATE(o.created_at) BETWEEN ? AND ?
+                GROUP BY DATE(o.created_at)
+                ORDER BY DATE(o.created_at) ASC
+                `, [startOfDay, endOfDay])
+
+            const [registerArr, orderArr] = await Promise.all([queryRegister, queryOrder])
+
+            console.log('registerArr:::', registerArr[0])
+            console.log('orderArr:::', orderArr[0])
+
+            return { code: 500, data: [] }
+        } catch (e) {
+            return { code: 500, msg: e.message }
+        }
     }
 }

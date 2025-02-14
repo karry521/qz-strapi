@@ -97,7 +97,7 @@ const EmailEdit = () => {
 
   // 获取数据
   const getData = async nowOffset => {
-    const response = await axios.get('/api/sendTemplate/findMany', {
+    const response = await axios.get('/api/send-template/list', {
       params: {
         offset: nowOffset,
         pageNum: pagination.pageNum,
@@ -180,7 +180,7 @@ const EmailEdit = () => {
   // 保存修改
   const saveChange = async () => {
     try {
-      const { data } = await axios.put('/api/sendTemplate/update', {
+      const { data } = await axios.put('/api/send-template/update', {
         name: showUpdate.name,
         content: showUpdate.newHtml
       })

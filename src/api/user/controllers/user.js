@@ -121,6 +121,7 @@ module.exports = {
                         expiresIn: "30d",
                     }),
                     user: {
+                        id: user.id,
                         email: user.email
                     }
                 }

@@ -2,7 +2,7 @@ module.exports = {
     routes: [
         { // 批量查询邮件模板
             method: 'GET',
-            path: '/sendTemplate/findMany',
+            path: '/send-template/list',
             handler: 'sendtemplate.findMany',
             config: {
                 auth: false
@@ -10,7 +10,7 @@ module.exports = {
         },
         { // 查询单个邮件模板
             method: 'GET',
-            path: '/sendTemplate/findOne',
+            path: '/send-template/one',
             handler: 'sendtemplate.findOne',
             config: {
                 auth: false
@@ -18,7 +18,7 @@ module.exports = {
         },
         { // 修改单个邮件模板content
             method: 'PUT',
-            path: '/sendTemplate/update',
+            path: '/send-template/update',
             handler: 'sendtemplate.update',
             config: {
                 auth: false
@@ -26,7 +26,7 @@ module.exports = {
         },
         { // 发送重置密码邮件
             method: 'POST',
-            path: '/sendResetPasswordEmail',
+            path: '/send-reset-password-email',
             handler: 'sendtemplate.sendResetPasswordEmail',
             config: {
                 auth: false

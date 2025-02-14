@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "socket_connections",
+  "info": {
+    "singularName": "socket-connection",
+    "pluralName": "socket-connections",
+    "displayName": "socket_connection",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "socket_id": {
+      "type": "text",
+      "unique": false,
+      "required": true
+    },
+    "event": {
+      "type": "string",
+      "required": true
+    },
+    "json": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

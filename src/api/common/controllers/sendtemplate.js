@@ -92,6 +92,8 @@ module.exports = {
 
             console.log('result:::', result)
 
+            if ('code' in result) return result
+
             // 插入至临时表
             await strapi.db.query('api::user-action-temp.user-action-temp').create({
                 data: temp

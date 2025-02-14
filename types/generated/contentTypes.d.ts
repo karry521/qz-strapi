@@ -744,7 +744,7 @@ export interface ApiDeviceDevice extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    account: Attribute.String & Attribute.Required & Attribute.Unique;
+    account: Attribute.String & Attribute.Required;
     password: Attribute.Password & Attribute.Required;
     isVerify: Attribute.Boolean & Attribute.DefaultTo<false>;
     user: Attribute.Relation<
@@ -928,6 +928,39 @@ export interface ApiSendTemplateSendTemplate extends Schema.CollectionType {
   };
 }
 
+export interface ApiSocketConnectionSocketConnection
+  extends Schema.CollectionType {
+  collectionName: 'socket_connections';
+  info: {
+    singularName: 'socket-connection';
+    pluralName: 'socket-connections';
+    displayName: 'socket_connection';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    socket_id: Attribute.Text & Attribute.Required;
+    event: Attribute.String & Attribute.Required;
+    json: Attribute.JSON & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::socket-connection.socket-connection',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::socket-connection.socket-connection',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUserActionTempUserActionTemp extends Schema.CollectionType {
   collectionName: 'user_action_temps';
   info: {
@@ -1017,6 +1050,7 @@ declare module '@strapi/types' {
       'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::send-template.send-template': ApiSendTemplateSendTemplate;
+      'api::socket-connection.socket-connection': ApiSocketConnectionSocketConnection;
       'api::user-action-temp.user-action-temp': ApiUserActionTempUserActionTemp;
       'api::user-log.user-log': ApiUserLogUserLog;
     }

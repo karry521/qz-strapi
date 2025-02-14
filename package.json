@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
+    "postinstall": "patch-package",
     "develop": "strapi develop",
     "develop2": "strapi build && strapi develop",
     "start": "strapi start",
@@ -11,6 +12,7 @@
     "strapi": "strapi"
   },
   "devDependencies": {
+    "patch-package": "^8.0.0"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
@@ -23,9 +25,12 @@
     "axios": "^1.7.9",
     "better-sqlite3": "8.6.0",
     "dayjs": "^1.11.13",
+    "exceljs": "^4.4.0",
     "joi": "^17.13.3",
+    "mysql2": "^3.11.0",
     "node-cache": "^5.1.2",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "socket.io": "^4.8.1"
   },
   "author": {
     "name": "A Strapi developer"

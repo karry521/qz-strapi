@@ -8,12 +8,12 @@ const alipaySdk = new AlipaySdk({
   appId: process.env.ALI_APP_ID,
   // 设置应用私钥
   privateKey: fs.readFileSync(
-    path.join(__dirname, "../config/aliAppPrivateKey.pem"),
+    path.join(__dirname, process.env.ALI_APP_PRIVATE_KEY),
     "ascii"
   ),
   // 设置支付宝公钥
   alipayPublicKey: fs.readFileSync(
-    path.join(__dirname, "../config/aliPublicKey.pem"),
+    path.join(__dirname, process.env.ALI_PUBLIC_KEY),
     "ascii"
   ),
   gateway: process.env.ALI_GATEWAY,

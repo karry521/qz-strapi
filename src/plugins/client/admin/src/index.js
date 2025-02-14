@@ -5,7 +5,7 @@ import pluginPkg from '../../package.json'
 import pluginId from './pluginId'
 import Initializer from './components/Initializer'
 import PluginIcon from './components/PluginIcon'
-import { BlockOutlined } from '@ant-design/icons'
+import { BlockOutlined, DollarOutlined } from '@ant-design/icons'
 
 /**
  * 美元图标
@@ -77,6 +77,28 @@ export default {
         // },
       ]
     })
+
+    app.addMenuLink({
+      to: `/plugins/order-list`,
+      icon: () => <DollarOutlined />,
+      intlLabel: {
+        id: `${pluginId}.plugin.name`,
+        defaultMessage: 'Order List'
+      },
+      Component: async () => {
+        const component = await import('./pages/OrderList')
+
+        return component
+      },
+      permissions: [
+        // Uncomment to set the permissions of the plugin here
+        // {
+        //   action: '', // the action name should be plugin::plugin-name.actionType
+        //   subject: null,
+        // },
+      ]
+    })
+
     app.registerPlugin({
       id: pluginId,
       initializer: Initializer,

@@ -2,7 +2,7 @@ module.exports = {
     routes: [
         {
             method: 'POST',
-            path: '/verifyToken',
+            path: '/verify-token',
             handler: 'common.verifyToken',
             config: {
                 auth: false
@@ -10,7 +10,7 @@ module.exports = {
         },
         {
             method: 'GET',
-            path: '/findProducts',
+            path: '/list-products',
             handler: 'common.findProducts',
             config: {
                 auth: false
@@ -18,7 +18,7 @@ module.exports = {
         },
         {
             method: 'GET',
-            path: '/findOneProduct',
+            path: '/one-product',
             handler: 'common.findOneProduct',
             config: {
                 auth: false
@@ -26,16 +26,77 @@ module.exports = {
         },
         {
             method: 'GET',
-            path: '/someProducts',
+            path: '/some-products',
             handler: 'common.someProducts',
+            config: {
+                auth: false,
+                middlewares: ["global::user-auth"]
+            }
+        },
+        {
+            method: 'GET',
+            path: '/one-app-info',
+            handler: 'common.findOneAppInfo',
             config: {
                 auth: false
             }
         },
         {
+            method: 'POST',
+            path: '/device/create-info',
+            handler: 'common.createDeviceInfo',
+            config: {
+                auth: false,
+                middlewares: ["global::user-auth"]
+            }
+        },
+        {
             method: 'GET',
-            path: '/findOneAppInfo',
-            handler: 'common.findOneAppInfo',
+            path: '/device/list',
+            handler: 'common.findManyDevice',
+            config: {
+                auth: false,
+                middlewares: ["global::user-auth"]
+            }
+        },
+        {
+            method: 'GET',
+            path: '/user-subscribe-update',
+            handler: 'common.findUserBindInfo',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'POST',
+            path: '/delete-device',
+            handler: 'common.deleteDevice',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'POST',
+            path: '/device/update-password',
+            handler: 'common.updateDevice',
+            config: {
+                auth: false,
+                middlewares: ["global::user-auth"]
+            }
+        },
+        {
+            method: 'GET',
+            path: '/one-subscribe-info',
+            handler: 'common.findOneSubscribe',
+            config: {
+                auth: false,
+                middlewares: ["global::user-auth"]
+            }
+        },
+        {
+            method: 'POST',
+            path: '/test-scoket',
+            handler: 'common.testScoket',
             config: {
                 auth: false
             }
