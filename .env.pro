@@ -24,7 +24,7 @@ WEB_SITE = forensicTools
 CLOUDFLARE_PUBLIC=https://resource.forensicTools.com
 
 # ONLINE_ADDRESS
-ONLINE_ADDRESS = https://strapi.gbyte.com.cn
+ONLINE_ADDRESS = https://safe-diamond-9eb6073e3a.strapiapp.com
 
 # clientAddress
 CLIENT_ADDRESS = http://localhost:3000
