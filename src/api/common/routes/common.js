@@ -61,7 +61,7 @@ module.exports = {
         },
         {
             method: 'GET',
-            path: '/user-subscribe-update',
+            path: '/user-bind-info',
             handler: 'common.findUserBindInfo',
             config: {
                 auth: false
