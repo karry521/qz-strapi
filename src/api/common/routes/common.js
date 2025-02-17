@@ -92,14 +92,6 @@ module.exports = {
                 auth: false,
                 middlewares: ["global::user-auth"]
             }
-        },
-        {
-            method: 'POST',
-            path: '/test-scoket',
-            handler: 'common.testScoket',
-            config: {
-                auth: false
-            }
         }
     ]
 }

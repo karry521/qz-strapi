@@ -99,16 +99,12 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           }
         })
 
-        console.log('queryOrder:::', queryOrder)
-
         // 查询产品信息
         const product = await strapi.db.query("api::product.product").findOne({
           where: {
             id: queryOrder.product_id
           }
         })
-
-        console.log('product:::', product)
 
         // 查询用户信息
         const user = await strapi.service('api::user.user').findOne({
@@ -129,16 +125,16 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         let extraLimit = Number(user[extraLimitKey])
         const expireDate = dayjs(user[expireTimeKey]).valueOf()
 
+        // 产品可绑定设备数量
+        const pNum = Number(product.device_num)
+
         // 判断是否未到期且购买增值服务
         if (expireDate > nowDate) {
-          if (isRenew) {
-            extraLimit += Number(product.device_num)
-          } else {
-            basicLimit = Number(product.device_num)
-          }
-        } else {
-          // 已到期，重置绑定数量
-          basicLimit = Number(product.device_num)
+          if (isRenew) extraLimit += pNum // 续订时增加额外数量
+          else if (isAdvanced && (pNum > basicLimit || pNum === -1)) basicLimit = pNum // 订阅为高级服务且可绑数量大于当前数量时
+          else if (!isAdvanced && (pNum > basicLimit)) basicLimit = pNum // 订阅为基础服务且可绑数量大于当前数量时
+        } else { // 已到期，重置绑定数量
+          basicLimit = pNum
           extraLimit = 0
         }
 
@@ -158,8 +154,6 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         if (strapi.io) {
           strapi.io.to(user.email + '-user-account').emit('user-subscribe-update', info)
         }
-
-        console.log('newUser:::', newUser)
       }
 
       return "success"

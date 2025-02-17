@@ -24,6 +24,7 @@ module.exports = {
 
             const deviceNum = Array.from(user.devices).length // 当前绑定设备数量
             let maxNum = 0 // 最大可绑定设备数量
+            let basicNum = 0 // 初始绑定设备数量
             let isBasic = false // 基础服务未到期
             let isAdvanced = false // 高级服务未到期
             let basicExpiretime = null // 基础服务到期时间
@@ -35,7 +36,7 @@ module.exports = {
             // 基础服务未到期
             if (dayjs(user.basic_expire_time).valueOf() > nowDate) {
                 isBasic = true
-                maxNum = Number(user.basic_basic_limit) + Number(user.basic_extra_limit)
+                basicNum = Number(user.basic_basic_limit)
             }
 
             // 高级服务未到期
@@ -43,8 +44,10 @@ module.exports = {
                 isAdvanced = true
 
                 if (Number(user.advanced_basic_limit) === -1) unlimitedNum = true
-                else maxNum = Number(user.advanced_basic_limit) + Number(user.advanced_extra_limit)
+                else basicNum = Number(user.advanced_basic_limit)
             }
+
+            maxNum = basicNum + Number(user.basic_extra_limit) + Number(user.advanced_extra_limit)
 
             if (user.basic_expire_time) basicExpiretime = dayjs(user.basic_expire_time).format('YYYY-MM-DD HH:mm:ss')
             if (user.advanced_expire_time) advancedExpiretime = dayjs(user.advanced_expire_time).format('YYYY-MM-DD HH:mm:ss')

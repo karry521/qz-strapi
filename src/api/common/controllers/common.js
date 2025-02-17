@@ -25,8 +25,6 @@ module.exports = {
             if (Number(type) === 0) { // 验证有效期
                 const verify = decodeJwtToken(token)
 
-                console.log("当前 JWT_SECRET:", process.env.JWT_SECRET)
-
                 return verify
             } else { // 不验证有效期
                 const verify = decode(token)
@@ -160,16 +158,27 @@ module.exports = {
             // 判断是否绑定上限
             const deviceNum = Array.from(user.devices).length // 当前绑定设备数量
             let maxNum = 0 // 最大可绑定设备数量
+            let basicNum = 0 // 初始可绑定数量
+            let unlimitedNum = false // 是否无限制绑定数量
 
             const nowDate = dayjs().valueOf() // 当前时间时间戳
 
             // 基础服务未到期
-            if (dayjs(user.basic_expire_time).valueOf() > nowDate) maxNum = Number(user.basic_basic_limit) + Number(user.basic_extra_limit)
+            if (dayjs(user.basic_expire_time).valueOf() > nowDate) basicNum = Number(user.basic_basic_limit)
 
             // 高级服务未到期
-            if (dayjs(user.advanced_expire_time).valueOf() > nowDate) maxNum = Number(user.advanced_basic_limit) + Number(user.advanced_extra_limit)
+            if (dayjs(user.advanced_expire_time).valueOf() > nowDate) {
+                if (Number(user.advanced_basic_limit) === -1) unlimitedNum = true
+                else basicNum = Number(user.advanced_basic_limit)
+            }
 
-            if (deviceNum >= maxNum) return { code: 200, status: 5254, msg: '用户绑定数量已上限' }
+            // 加上额外的设备数量
+            maxNum = basicNum + Number(user.basic_extra_limit) + Number(user.advanced_extra_limit)
+
+            console.log('basicNum:::', basicNum)
+            console.log('maxNum:::', maxNum)
+
+            if (deviceNum >= maxNum && !unlimitedNum) return { code: 200, status: 5254, msg: '用户绑定数量已上限' }
 
             // 绑定
             const newDevice = await strapi.db.query('api::device.device').create({
@@ -352,24 +361,6 @@ module.exports = {
             console.log('result:::', result)
 
             return { code: 200 }
-        } catch (e) {
-            return { code: 500, msg: e.message }
-        }
-    },
-    async testScoket(ctx) { // 测试scoket通信
-        try {
-            // 获取最新的用户绑定情况
-            const info = await strapi.service('api::common.common').findUserBindInfo('junyuan@gbyte.com')
-
-            if (strapi.io) {
-                strapi.io.to('junyuan@gbyte.com-user-account').emit('userBindInfo', info)
-            }
-
-            return {
-                code: 200, msg: '测试通过', jwt: jwt.sign({ id: 44 }, process.env.JWT_SECRET, {
-                    expiresIn: "30d",
-                })
-            }
         } catch (e) {
             return { code: 500, msg: e.message }
         }

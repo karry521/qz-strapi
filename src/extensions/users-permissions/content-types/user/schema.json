@@ -107,10 +107,6 @@
     "basic_expire_time": {
       "type": "datetime"
     },
-    "basic_priority": {
-      "type": "integer",
-      "required": true
-    },
     "advanced_basic_limit": {
       "type": "integer",
       "required": true
@@ -121,10 +117,6 @@
     },
     "advanced_expire_time": {
       "type": "datetime"
-    },
-    "advanced_priority": {
-      "type": "integer",
-      "required": true
     },
     "devices": {
       "type": "relation",
