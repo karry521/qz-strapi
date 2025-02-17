@@ -131,7 +131,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         // 判断是否未到期且购买增值服务
         if (expireDate > nowDate) {
           if (isRenew) extraLimit += pNum // 续订时增加额外数量
-          else if (isAdvanced && (pNum > basicLimit || pNum === -1)) basicLimit = pNum // 订阅为高级服务且可绑数量大于当前数量时
+          else if (isAdvanced && basicLimit !== -1 && (pNum > basicLimit || pNum === -1)) basicLimit = pNum // 订阅为高级服务且可绑数量大于当前数量时
           else if (!isAdvanced && (pNum > basicLimit)) basicLimit = pNum // 订阅为基础服务且可绑数量大于当前数量时
         } else { // 已到期，重置绑定数量
           basicLimit = pNum
