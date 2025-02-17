@@ -58,6 +58,10 @@
     "device_num": {
       "type": "integer",
       "required": true
+    },
+    "priority": {
+      "type": "integer",
+      "required": true
     }
   }
 }
