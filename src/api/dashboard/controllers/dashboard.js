@@ -77,11 +77,16 @@ module.exports = {
     async icloudCookie(ctx) { // icloud下载cookie
         const { body } = ctx.request
 
+        console.log('body:::', body)
+
         // 网关转发
         const result = await request('/v5/client/icloud/auth/cookie', 'POST', {
             mode: body.mode, // 1:基础模式  2:高级模式
             username: body.username
         })
+
+        console.log('result:::', result)
+        console.log('result.data:::', result.data)
 
         ctx.body = result.data
     },
