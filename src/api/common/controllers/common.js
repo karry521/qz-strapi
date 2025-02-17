@@ -334,10 +334,10 @@ module.exports = {
     },
     async findOneSubscribe(ctx) { // 查询单个用户订阅信息
 
-        const { email } = ctx.query
+        const { id } = ctx.query
 
-        const validate = validateData({ email }, {
-            email: ['string', 'require', 'email']
+        const validate = validateData({ id }, {
+            id: ['string', 'require']
         })
 
         // 校验邮箱
@@ -349,18 +349,38 @@ module.exports = {
             let query = strapi.db.connection('up_users as u')
                 .join('orders as o', 'u.id', 'o.user_id')
                 .join('products as p', 'o.product_id', 'p.id')
-                .select('p.name', 'p.type', 'u.email', 'o.expire_time')
+                .select('p.name', 'p.type', 'p.json', 'p.priority', 'u.basic_expire_time', 'u.advanced_expire_time')
+                .where('u.id', id)
                 .where('o.payment_status', '0')
                 .where('o.expire_time', '>', nowDate)
                 .orderBy('o.created_at', 'desc')
 
-            console.log('query:::', query.toSQL().toNative())
-
             const result = await query
 
-            console.log('result:::', result)
+            const order = Array.from(result).sort((a, b) => {
+                // 按照 priority 排序，越小越优先
+                if (a.priority !== b.priority) {
+                    return a.priority - b.priority
+                }
+                // 如果 priority 相同，则 type 为 business 的优先
+                if (a.type === 'business' && b.type !== 'business') {
+                    return -1 // a 优先
+                }
+                if (a.type !== 'business' && b.type === 'business') {
+                    return 1 // b 优先
+                }
+                return 0 // 如果 type 也相同，则认为平级
+            })[0]
 
-            return { code: 200 }
+            return {
+                code: 200,
+                data: {
+                    name: order.name,
+                    textArr: order.json.list,
+                    basicExpireTime: result[0].basic_expire_time,
+                    advancedExpireTime: result[0].advanced_expire_time
+                }
+            }
         } catch (e) {
             return { code: 500, msg: e.message }
         }
