@@ -676,9 +676,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     basic_basic_limit: Attribute.Integer;
     basic_extra_limit: Attribute.Integer;
     basic_expire_time: Attribute.DateTime;
+    basic_priority: Attribute.Integer & Attribute.Required;
     advanced_basic_limit: Attribute.Integer & Attribute.Required;
     advanced_extra_limit: Attribute.Integer & Attribute.Required;
     advanced_expire_time: Attribute.DateTime;
+    advanced_priority: Attribute.Integer & Attribute.Required;
     devices: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -842,6 +844,7 @@ export interface ApiProductProduct extends Schema.CollectionType {
       Attribute.Required &
       Attribute.DefaultTo<false>;
     device_num: Attribute.Integer & Attribute.Required;
+    priority: Attribute.Integer & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
