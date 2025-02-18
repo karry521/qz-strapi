@@ -358,6 +358,8 @@ module.exports = {
 
             const result = await query
 
+            console.log('result:::', result)
+
             const order = Array.from(result).sort((a, b) => {
                 // 按照 priority 排序，越小越优先
                 if (a.priority !== b.priority) {
@@ -372,6 +374,8 @@ module.exports = {
                 }
                 return 0 // 如果 type 也相同，则认为平级
             })[0]
+
+            console.log('order:::', order)
 
             return {
                 code: 200,
