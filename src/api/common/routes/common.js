@@ -92,6 +92,14 @@ module.exports = {
                 auth: false,
                 middlewares: ["global::user-auth"]
             }
+        },
+        {
+            method: 'POST',
+            path: '/local-subscribe-mock',
+            handler: 'common.localSubscribeMock',
+            config: {
+                auth: false
+            }
         }
     ]
 }
