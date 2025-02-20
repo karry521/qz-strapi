@@ -47,6 +47,46 @@ module.exports = {
             config: {
                 auth: false
             }
+        },
+        {
+            method: 'GET',
+            path: '/dashboard/register',
+            handler: 'dashboard.HomeRegisterCount',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'GET',
+            path: '/dashboard/order',
+            handler: 'dashboard.HomeOrderCount',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'GET',
+            path: '/dashboard/order-pay',
+            handler: 'dashboard.HomeOrderPayCount',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'GET',
+            path: '/dashboard/renew-pay',
+            handler: 'dashboard.HomeRenewPayCount',
+            config: {
+                auth: false
+            }
+        },
+        {
+            method: 'GET',
+            path: '/dashboard/total',
+            handler: 'dashboard.HomeTotalCount',
+            config: {
+                auth: false
+            }
         }
     ]
 }
